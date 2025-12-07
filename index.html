@@ -131,6 +131,17 @@
 			#tumblr-feed a { display: block; }
 			#tumblr-feed img { display: block; width: 100%; height: auto; aspect-ratio: 1/1; object-fit: cover; }
 
+			/* Tumblr lightbox modal */
+			.modal-backdrop { position: fixed; inset: 0; background: rgba(29,16,40,0.6); display: none; align-items: center; justify-content: center; z-index: 1000; }
+			.modal-backdrop.open { display: flex; }
+			.modal { background: #ffffff; border-radius: 12px; max-width: 90vw; max-height: 85vh; box-shadow: 0 12px 32px rgba(0,0,0,0.35); display: grid; grid-template-rows: auto 1fr auto; overflow: hidden; }
+			.modal header { padding: 8px 12px; border-bottom: 1px solid #ede9fe; color: var(--muted); }
+			.modal .content { padding: 12px; overflow: auto; }
+			.modal .content img { display: block; max-width: 82vw; max-height: 70vh; width: auto; height: auto; object-fit: contain; border-radius: 8px; }
+			.modal footer { display: flex; gap: 8px; justify-content: flex-end; padding: 10px 12px; border-top: 1px solid #ede9fe; }
+			.modal .button { background: #ede9fe; color: #1d1028; border: none; border-radius: 8px; padding: 6px 10px; cursor: pointer; font-weight: 600; }
+			.modal .button:hover { background: #e9d5ff; }
+
 			footer { color: var(--muted); font-size: 0.9rem; margin: 32px 0 16px; text-align: center; }
 
 			@media (max-width: 640px) {
@@ -217,6 +228,20 @@
 			</footer>
 		</div>
 
+		<!-- Tumblr Lightbox Modal -->
+		<div id="tumblr-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="tumblr-modal-title">
+			<div class="modal">
+				<header><h3 id="tumblr-modal-title" style="margin:0; font-size:1rem">Post</h3></header>
+				<div class="content">
+					<img id="tumblr-modal-img" alt="Tumblr image preview" />
+				</div>
+				<footer>
+					<button id="tumblr-modal-view" class="button" type="button">View post</button>
+					<button id="tumblr-modal-close" class="button" type="button">Close</button>
+				</footer>
+			</div>
+		</div>
+
 		<script>
 						// ============ Tumblr API ============
 						// Simple client-side configuration (no URL/localStorage logic)
@@ -288,7 +313,8 @@
 									const card = document.createElement('article');
 									card.className = 'card';
 									const a = document.createElement('a');
-									a.href = p.post_url || `https://${TUMBLR_BLOG_HOSTNAME}/post/${p.id}`;
+									const postUrl = p.post_url || `https://${TUMBLR_BLOG_HOSTNAME}/post/${p.id}`;
+									a.href = postUrl;
 									a.target = '_blank';
 									a.rel = 'noopener noreferrer';
 									const img = document.createElement('img');
@@ -297,6 +323,12 @@
 									a.appendChild(img);
 									card.appendChild(a);
 									feed.appendChild(card);
+									// Intermediary modal: open lightbox on click
+									a.addEventListener('click', (ev) => {
+										// Open modal instead; user can choose to continue to Tumblr
+										ev.preventDefault();
+										openTumblrModal(imageUrl, postUrl);
+									});
 									rendered++;
 								});
 
@@ -473,6 +505,24 @@
 						controls.classList.remove('open');
 					});
 				}
+				// Tumblr modal wiring
+				const tm = document.getElementById('tumblr-modal');
+				const tmImg = document.getElementById('tumblr-modal-img');
+				const tmView = document.getElementById('tumblr-modal-view');
+				const tmClose = document.getElementById('tumblr-modal-close');
+				window.openTumblrModal = (imgUrl, postUrl) => {
+					if (tm && tmImg) {
+						tmImg.src = imgUrl;
+						tm.classList.add('open');
+						if (tmView) {
+							tmView.onclick = () => { window.open(postUrl, '_blank', 'noopener,noreferrer'); };
+						}
+					}
+				};
+				const closeModal = () => { tm.classList.remove('open'); tmImg.src = ''; };
+				if (tmClose) tmClose.addEventListener('click', closeModal);
+				tm.addEventListener('click', (e) => { if (e.target === tm) closeModal(); });
+				document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && tm.classList.contains('open')) closeModal(); });
 			});
 
 			document.addEventListener('DOMContentLoaded', renderAudioGrid);

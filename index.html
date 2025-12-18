@@ -131,6 +131,23 @@
 			#tumblr-feed a { display: block; }
 			#tumblr-feed img { display: block; width: 100%; height: auto; aspect-ratio: 1/1; object-fit: cover; }
 
+			/* Writing section and reader */
+			.writing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+			.w-card { background: var(--card-2); border-radius: 12px; padding: 12px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
+			.w-card:hover { transform: translateY(-2px); transition: transform 160ms ease; }
+			.w-card .title { font-weight: 700; margin: 0 0 6px; }
+			.w-card .excerpt { color: var(--muted); font-size: 0.95rem; }
+			.reader-backdrop { position: fixed; inset: 0; background: rgba(29,16,40,0.7); display: none; z-index: 1100; }
+			.reader-backdrop.open { display: block; }
+			.reader { position: fixed; inset: 24px; background: #ffffff; border-radius: 12px; box-shadow: 0 18px 48px rgba(0,0,0,0.35); overflow: hidden; display: grid; grid-template-rows: auto 1fr auto; z-index: 1200; }
+			.reader header { padding: 10px 14px; border-bottom: 1px solid #ede9fe; display: flex; justify-content: space-between; align-items: center; }
+			.reader header h3 { margin: 0; font-size: 1rem; color: var(--muted); }
+			.reader .content { padding: 16px; overflow: auto; }
+			.reader .content :where(h1,h2,h3) { margin-top: 0; }
+			.reader .controls { padding: 10px 14px; border-top: 1px solid #ede9fe; display: flex; gap: 8px; justify-content: flex-end; }
+			.reader .button { background: #ede9fe; color: #1d1028; border: none; border-radius: 8px; padding: 6px 10px; cursor: pointer; font-weight: 600; }
+			.reader .button:hover { background: #e9d5ff; }
+
 			/* Tumblr lightbox modal */
 			.modal-backdrop { position: fixed; inset: 0; background: rgba(29,16,40,0.6); display: none; align-items: center; justify-content: center; z-index: 1000; }
 			.modal-backdrop.open { display: flex; }
@@ -210,13 +227,22 @@
 
 				<!-- Performance Videos Section -->
 				<div class="embed" aria-labelledby="videos-title">
+          <img src="assets/more.png" alt="More performances" class="block-image" />
 					<header><h2 id="videos-title">Performance Videos</h2></header>
-					<img src="assets/more.png" alt="More performances" class="block-image" />
 					<div class="card" style="border: none; border-radius: 0; padding: 16px;">
 						<div class="video-grid" id="video-grid" aria-label="Performance videos grid"></div>
 						<div id="video-embed" class="frame r16x9" style="margin-top: 12px; overflow: hidden; height: 0; opacity: 0; transition: height 240ms ease, opacity 240ms ease;"></div>
 						<div id="video-controls" aria-label="Video controls"><button id="close-video" class="button" type="button">Close video</button></div>
 						<p class="subtitle" style="margin-top:12px">Click a square to open the video below.</p>
+					</div>
+				</div>
+
+				<!-- Writing Section -->
+				<div class="embed" aria-labelledby="writing-title">
+					<header><h2 id="writing-title">Writing</h2></header>
+					<div class="card" style="border: none; border-radius: 0; padding: 16px;">
+						<div class="writing-grid" id="writing-grid" aria-label="Writing posts from Tumblr"></div>
+						<p class="subtitle" style="margin-top:12px">Click a card to read in full.</p>
 					</div>
 				</div>
 			</section>
@@ -228,12 +254,26 @@
 			</footer>
 		</div>
 
+		<!-- Full-page Reader Overlay -->
+		<div id="reader-backdrop" class="reader-backdrop" role="dialog" aria-modal="true" aria-labelledby="reader-title">
+			<div id="reader" class="reader">
+				<header>
+					<h3 id="reader-title"></h3>
+					<div>
+						<button id="reader-view" class="button" type="button">View on Tumblr</button>
+						<button id="reader-close" class="button" type="button">Close</button>
+					</div>
+				</header>
+				<div id="reader-content" class="content"></div>
+				<div class="controls"></div>
+			</div>
+		</div>
+
 		<!-- Tumblr Lightbox Modal -->
 		<div id="tumblr-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="tumblr-modal-title">
 			<div class="modal">
-				<header><h3 id="tumblr-modal-title" style="margin:0; font-size:1rem">Post</h3></header>
 				<div class="content">
-					<img id="tumblr-modal-img" alt="Tumblr image preview" />
+					<img id="tumblr-modal-img" alt="Image preview" />
 				</div>
 				<footer>
 					<button id="tumblr-modal-view" class="button" type="button">View post</button>
@@ -491,6 +531,71 @@
 				});
 			}
 
+			// ============ Writing (Tumblr Text Posts) ============
+			const TUMBLR_WRITING_HOSTNAME = 'greypoodle.tumblr.com';
+
+			function stripHtml(html) {
+				const tmp = document.createElement('div');
+				tmp.innerHTML = html || '';
+				return (tmp.textContent || tmp.innerText || '').trim();
+			}
+
+			async function fetchWritingPosts() {
+				const grid = document.getElementById('writing-grid');
+				if (!grid) return;
+				grid.innerHTML = '<div class="subtitle">Loading writing…</div>';
+				try {
+					const url = `https://api.tumblr.com/v2/blog/${encodeURIComponent(TUMBLR_WRITING_HOSTNAME)}/posts/text?api_key=${encodeURIComponent(TUMBLR_API_KEY)}&limit=12`;
+					const res = await fetch(url, { mode: 'cors' });
+					if (!res.ok) throw new Error('Tumblr text API error');
+					const data = await res.json();
+					const posts = (data.response && data.response.posts) || [];
+					grid.innerHTML = '';
+					posts.forEach(p => {
+						const title = p.title || stripHtml(p.body).split('\n')[0].slice(0, 80);
+						const excerpt = stripHtml(p.body).slice(0, 140) + (stripHtml(p.body).length > 140 ? '…' : '');
+						const card = document.createElement('article');
+						card.className = 'w-card';
+						const tEl = document.createElement('div'); tEl.className = 'title'; tEl.textContent = title || 'Untitled';
+						const eEl = document.createElement('div'); eEl.className = 'excerpt'; eEl.textContent = excerpt;
+						card.appendChild(tEl); card.appendChild(eEl);
+						card.addEventListener('click', () => openReader(p));
+						grid.appendChild(card);
+					});
+					if (!posts.length) {
+						grid.innerHTML = '<div class="subtitle">No writing posts found.</div>';
+					}
+				} catch (err) {
+					console.error('Writing fetch failed', err);
+					grid.innerHTML = '<div class="subtitle">Unable to load writing posts.</div>';
+				}
+			}
+
+			function openReader(post) {
+				const backdrop = document.getElementById('reader-backdrop');
+				const panel = document.getElementById('reader');
+				const titleEl = document.getElementById('reader-title');
+				const contentEl = document.getElementById('reader-content');
+				const viewBtn = document.getElementById('reader-view');
+				if (!backdrop || !panel || !titleEl || !contentEl) return;
+				titleEl.textContent = post.title || 'Untitled';
+				contentEl.innerHTML = post.body || '';
+				backdrop.classList.add('open');
+				if (viewBtn) {
+					const postUrl = post.post_url || `https://${TUMBLR_WRITING_HOSTNAME}/post/${post.id}`;
+					viewBtn.onclick = () => { window.open(postUrl, '_blank', 'noopener,noreferrer'); };
+				}
+			}
+
+			function closeReader() {
+				const backdrop = document.getElementById('reader-backdrop');
+				const titleEl = document.getElementById('reader-title');
+				const contentEl = document.getElementById('reader-content');
+				if (backdrop) backdrop.classList.remove('open');
+				if (titleEl) titleEl.textContent = '';
+				if (contentEl) contentEl.innerHTML = '';
+			}
+
 			document.addEventListener('DOMContentLoaded', () => {
 				renderVideoGrid();
 				const embed = document.getElementById('video-embed');
@@ -523,6 +628,15 @@
 				if (tmClose) tmClose.addEventListener('click', closeModal);
 				tm.addEventListener('click', (e) => { if (e.target === tm) closeModal(); });
 				document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && tm.classList.contains('open')) closeModal(); });
+				// Reader controls
+				const readerBackdrop = document.getElementById('reader-backdrop');
+				const readerClose = document.getElementById('reader-close');
+				const readerView = document.getElementById('reader-view');
+				if (readerClose) readerClose.addEventListener('click', closeReader);
+				if (readerBackdrop) readerBackdrop.addEventListener('click', (e) => { if (e.target === readerBackdrop) closeReader(); });
+				document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeReader(); });
+				// Fetch writing posts
+				fetchWritingPosts();
 			});
 
 			document.addEventListener('DOMContentLoaded', renderAudioGrid);

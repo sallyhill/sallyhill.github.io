@@ -390,11 +390,11 @@
 			// Set current year in footer
 			document.getElementById('y').textContent = new Date().getFullYear();
 
-			// Configure your S3 MP3 links here
 			const s3Links = [
-        'https://fawm2025.s3.ca-central-1.amazonaws.com/154_less.mp3',
-        'https://fawm2025.s3.ca-central-1.amazonaws.com/timebox_switch_bpm.mp3',
-				'https://fawm2025.s3.ca-central-1.amazonaws.com/aconite.mp3'
+				{ url: 'https://fawm2025.s3.ca-central-1.amazonaws.com/154_less.mp3', title: '154 eclat crew' },
+				{ url: 'https://fawm2025.s3.ca-central-1.amazonaws.com/timebox_switch_bpm.mp3', title: 'timebox_switch' },
+				{ url: 'https://fawm2025.s3.ca-central-1.amazonaws.com/aconite.mp3', title: 'aconite' },
+				{ url: 'https://fawm2025.s3.ca-central-1.amazonaws.com/grindhouse_dumb_wavetable_synth_longer.mp3', title: 'tis the night!!' }
 			];
 
 			// Generate a pleasant lavender/purple tone
@@ -410,7 +410,11 @@
 			function renderAudioGrid() {
 				const grid = document.getElementById('audio-grid');
 				grid.innerHTML = '';
-				s3Links.forEach((url, idx) => {
+				s3Links.forEach((entry, idx) => {
+					const item = typeof entry === 'string' ? { url: entry } : (entry || {});
+					const url = item.url;
+					const customTitle = item.title;
+					if (!url) return;
 					const square = document.createElement('div');
 					square.className = 'square';
 					square.style.background = randomLavenderTone();
@@ -420,9 +424,9 @@
 
 					const label = document.createElement('div');
 					label.className = 'label';
-					// Use filename (without extension) as the label text
+					// Use custom title if provided, else filename (without extension)
 					const filename = url.split('/').pop() || '';
-					label.textContent = filename.replace(/\.[^/.]+$/, '');
+					label.textContent = (customTitle && customTitle.trim()) || filename.replace(/\.[^/.]+$/, '');
 					inner.appendChild(label);
 					square.appendChild(inner);
 

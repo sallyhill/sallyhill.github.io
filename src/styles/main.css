@@ -1,8 +1,8 @@
 :root { --bg: #ffffff; --fg: #1d1028; --text: #1d1028; --muted: #6a5d7a; --accent: #8b5cf6; --card-1: #f3e8ff; --card-2: #ede9fe; --card-3: #e9d5ff; }
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; color: var(--fg); font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
-body { cursor: url('assets/nat1056.cur'), auto; min-height: 100vh; overflow-x: hidden; }
-html, body { background-image: url('assets/firering.jpg'); background-repeat: repeat; background-size: 128px 128px; }
+body { cursor: url('/assets/nat1056.cur'), auto; min-height: 100vh; overflow-x: hidden; }
+html, body { background-image: url('/assets/firering.jpg'); background-repeat: repeat; background-size: 128px 128px; }
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 .container { max-width: 960px; margin: 0 auto; padding: 24px; }
@@ -12,9 +12,9 @@ img.hero { display: block; max-width: 100%; width: 100%; height: auto; border-ra
 .subtitle { color: var(--muted); font-size: 1rem; }
 .about-content { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: start; }
 .about-image { width: 160px; height: auto; border-radius: 12px; object-fit: cover; }
-.card { background: var(--card-1); border: none; border-radius: 12px; padding: 16px; background-image: linear-gradient(rgba(243,232,255,0.6), rgba(243,232,255,0.6)), url('assets/purplem1.jpg'); background-size: cover; background-repeat: no-repeat; background-position: center; }
-.card.alt { background: var(--card-2); background-image: linear-gradient(rgba(237,233,254,0.6), rgba(237,233,254,0.6)), url('assets/purplem1.jpg'); background-size: cover; background-repeat: no-repeat; background-position: center; }
-.card.subtle { background: var(--card-3); background-image: linear-gradient(rgba(233,213,255,0.6), rgba(233,213,255,0.6)), url('assets/purplem1.jpg'); background-size: cover; background-repeat: no-repeat; background-position: center; }
+.card { background: var(--card-1); border: none; border-radius: 12px; padding: 16px; background-image: linear-gradient(rgba(243,232,255,0.6), rgba(243,232,255,0.6)), url('/assets/purplem1.jpg'); background-size: cover; background-repeat: no-repeat; background-position: center; }
+.card.alt { background: var(--card-2); background-image: linear-gradient(rgba(237,233,254,0.6), rgba(237,233,254,0.6)), url('/assets/purplem1.jpg'); background-size: cover; background-repeat: no-repeat; background-position: center; }
+.card.subtle { background: var(--card-3); background-image: linear-gradient(rgba(233,213,255,0.6), rgba(233,213,255,0.6)), url('/assets/purplem1.jpg'); background-size: cover; background-repeat: no-repeat; background-position: center; }
 .work { margin: 24px 0; display: grid; gap: 16px; }
 .block-image { width: 100%; }
 img.block-image { display: block; max-width: 100%; width: 100%; height: auto; border-radius: 12px; object-fit: cover; }

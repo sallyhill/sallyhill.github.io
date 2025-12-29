@@ -20,6 +20,10 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run build
+      - name: Copy static assets into dist
+        run: |
+          mkdir -p dist/assets
+          cp -R assets/. dist/assets/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

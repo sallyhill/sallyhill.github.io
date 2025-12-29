@@ -76,12 +76,12 @@ img.block-image { display: block; max-width: 100%; width: 100%; height: auto; bo
 .modal .button { background: #ede9fe; color: #1d1028; border: none; border-radius: 8px; padding: 6px 10px; cursor: pointer; font-weight: 600; }
 .modal .button:hover { background: #e9d5ff; }
 footer { color: var(--muted); font-size: 0.9rem; margin: 32px 0 16px; text-align: center; }
-.runner { position: relative; overflow: hidden; height: 220px; border-radius: 12px; margin-bottom: 12px; }
-.runner .track { display: flex; align-items: center; gap: 24px; padding: 8px 12px; width: max-content; animation: runner-scroll-left 18s linear infinite; }
+.runner { position: relative; overflow: hidden; height: 220px; border-radius: 12px; margin-bottom: 12px; width: 100dvw; left: 50%; transform: translateX(-50%); }
+.runner .track { display: flex; align-items: center; gap: 24px; padding: 8px 12px; width: max-content; animation: runner-scroll-left 16s linear infinite; will-change: transform; }
 .runner img { height: 200px; width: auto; display: block; }
 .runner.inverted img { transform: rotate(180deg); }
 @keyframes runner-scroll-left { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) { .runner .track { animation: none; } }
-.top-runner { margin: 16px 0; }
+.top-runner { margin: 0 0 16px; border-radius: 0; }
 @media (max-width: 640px) { .title { font-size: 1.6rem; } .about-content { grid-template-columns: 1fr; } .about-image { width: 100%; }
 }

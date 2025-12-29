@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './styles/main.css'
 
 import Header from './components/Header.jsx'
+import BlueGuyRunner from './components/BlueGuyRunner.jsx'
 import About from './components/About.jsx'
 import Work from './components/Work.jsx'
 import TumblrVisuals from './components/TumblrVisuals.jsx'
@@ -18,6 +19,7 @@ const App = () => {
 
   return (
     <>
+      <BlueGuyRunner inverted className="top-runner" />
       <Header />
       <About />
       <Work />

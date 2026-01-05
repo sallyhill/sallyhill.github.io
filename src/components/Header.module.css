@@ -1,0 +1,5 @@
+.header { display: grid; gap: 16px; align-items: end; margin-bottom: 24px; }
+.header__hero { display: block; max-width: 100%; width: 100%; height: auto; border-radius: 12px; object-fit: cover; }
+.header__title { font-size: 2rem; font-weight: 700; letter-spacing: 0.5px; }
+.header__subtitle { color: var(--muted); font-size: 1rem; }
+@media (max-width: 640px) { .header__title { font-size: 1.6rem; } }

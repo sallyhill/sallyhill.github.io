@@ -2,6 +2,9 @@ import React from 'react'
 import { TUMBLR_API_KEY, TUMBLR_WRITING_HOSTNAME } from '../lib/config.js'
 import { stripHtml } from '../lib/utils.js'
 import SafeHtml from './SafeHtml.jsx'
+import styles from './WritingSection.module.css'
+import Card from './ui/Card.jsx'
+import Button from './ui/Button.jsx'
 
 const firstHeadingText = (html) => {
   const tmp = document.createElement('div')
@@ -60,39 +63,39 @@ const WritingSection = () => {
   }, [])
 
   return (
-    <div className="embed" aria-labelledby="writing-title">
-      <header><h2 id="writing-title">Writing</h2></header>
-      <div className="card" style={{ border: 'none', borderRadius: 0, padding: 16 }}>
-        {loading && <div className="subtitle">Loading writing…</div>}
-        {error && <div className="subtitle">{error}</div>}
+    <div className={styles.writing} aria-labelledby="writing-title">
+      <header className={styles.writing__header}><h2 id="writing-title">Writing</h2></header>
+      <Card padding={16}>
+        {loading && <div className={styles.writing__subtitle}>Loading writing…</div>}
+        {error && <div className={styles.writing__subtitle}>{error}</div>}
         {!loading && !error && (
-          <div className="writing-grid" aria-label="Writing posts from Tumblr">
+          <div className={styles.writing__grid} aria-label="Writing posts from Tumblr">
             {posts.map((p, idx) => {
               const title = deriveTitle(p).slice(0, 120)
               const excerpt = deriveExcerpt(p)
               return (
-                <article key={idx} className="w-card" onClick={() => setReader({ open: true, post: p })}>
-                  <div className="title">{title || 'Untitled'}</div>
-                  <div className="excerpt">{excerpt}</div>
+                <article key={idx} className={styles.writing__card} onClick={() => setReader({ open: true, post: p })}>
+                  <div className={styles.writing__title}>{title || 'Untitled'}</div>
+                  <div className={styles.writing__excerpt}>{excerpt}</div>
                 </article>
               )
             })}
           </div>
         )}
-        <p className="subtitle" style={{ marginTop: 12 }}>Click a card to read in full.</p>
-      </div>
+        <p className={styles.writing__subtitle} style={{ marginTop: 12 }}>Click a card to read in full.</p>
+      </Card>
 
       {reader.open && (
-        <div className="reader-backdrop open" onClick={(e) => { if (e.target.classList.contains('reader-backdrop')) setReader({ open: false, post: null }); }}>
-          <div className="reader" role="dialog" aria-modal="true" aria-labelledby="reader-title">
-            <header>
-              <h3 id="reader-title">{deriveTitle(reader.post).slice(0, 120)}</h3>
-              <div>
-                <button className="button" type="button" onClick={() => setReader({ open: false, post: null })}>Close</button>
+        <div className={styles.writing__backdrop} onClick={(e) => { if ((e.target).classList.contains(styles.writing__backdrop)) setReader({ open: false, post: null }); }}>
+          <div className={styles.writing__reader} role="dialog" aria-modal="true" aria-labelledby="reader-title">
+            <header className={styles.writing__readerHeader}>
+              <h3 className={styles.writing__readerTitle} id="reader-title">{deriveTitle(reader.post).slice(0, 120)}</h3>
+              <div className={styles.writing__readerActions}>
+                <Button onClick={() => setReader({ open: false, post: null })}>Close</Button>
               </div>
             </header>
-            <div className="scroll">
-              <SafeHtml className="content" html={bodyHtmlWithoutFirstHeading(reader.post?.body || '')} />
+            <div className={styles.writing__scroll}>
+              <SafeHtml className={styles.writing__content} html={bodyHtmlWithoutFirstHeading(reader.post?.body || '')} />
             </div>
           </div>
         </div>

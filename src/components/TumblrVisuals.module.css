@@ -1,0 +1,14 @@
+.visuals { background: transparent; border: none; border-radius: 12px; overflow: hidden; }
+.visuals__header { padding: 10px 12px; border-bottom: none; color: var(--muted); }
+.visuals__header h2 { margin: 0; font-size: 1rem; }
+.visuals__grid { display: grid; gap: 16px; padding: 16px; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+.visuals__itemCard { padding: 0; background: transparent; border-radius: 10px; overflow: hidden; }
+.visuals__grid a { display: block; }
+.visuals__grid img { display: block; width: 100%; height: auto; aspect-ratio: 1/1; object-fit: cover; }
+.visuals__backdrop { position: fixed; inset: 0; background: rgba(29,16,40,0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+.visuals__modal { background: #ffffff; border-radius: 12px; max-width: 90vw; max-height: 85vh; box-shadow: 0 12px 32px rgba(0,0,0,0.35); display: grid; grid-template-rows: auto 1fr auto; overflow: hidden; }
+.visuals__modalHeader { padding: 8px 12px; border-bottom: 1px solid #ede9fe; color: var(--muted); }
+.visuals__modalContent { padding: 12px; overflow: auto; }
+.visuals__modalImage { display: block; max-width: 82vw; max-height: 70vh; width: auto; height: auto; object-fit: contain; border-radius: 8px; }
+.visuals__modalFooter { display: flex; gap: 5px; justify-content: flex-end; padding: 10px 12px; border-top: 1px solid #ede9fe; }
+.visuals__subtitle { color: var(--muted); font-size: 1rem; }

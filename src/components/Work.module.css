@@ -1,0 +1,3 @@
+.work { margin: 24px 0; display: grid; gap: 16px; }
+.work__image { width: 100%; }
+img.work__image { display: block; max-width: 100%; width: 100%; height: auto; border-radius: 12px; object-fit: cover; }

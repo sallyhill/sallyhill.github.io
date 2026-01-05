@@ -1,5 +1,9 @@
 import React from 'react';
 import { randomLavenderTone, youtubeIdFromUrl } from '../lib/utils.js';
+import styles from './VideosSection.module.css';
+import morePng from '../assets/more.png';
+import Card from './ui/Card.jsx';
+import Button from './ui/Button.jsx';
 
 const VideosSection = () => {
   const performanceLinks = [
@@ -22,26 +26,26 @@ const VideosSection = () => {
   }, [videoId]);
 
   return (
-    <div className="embed" aria-labelledby="videos-title">
-      <img src="assets/more.png" alt="More performances" className="block-image" />
-      <header><h2 id="videos-title">Old Performance Videos</h2></header>
-      <div className="card" style={{ border: 'none', borderRadius: 0, padding: 16 }}>
-        <div className="video-grid" aria-label="Performance videos grid">
+    <div className={styles.videos} aria-labelledby="videos-title">
+      <img src={morePng} alt="More performances" className={styles.videos__image} />
+      <header className={styles.videos__header}><h2 id="videos-title">Old Performance Videos</h2></header>
+      <Card padding={16}>
+        <div className={styles.videos__grid} aria-label="Performance videos grid">
           {performanceLinks.map((url, idx) => {
             const id = youtubeIdFromUrl(url);
             return (
-              <div key={idx} className="v-square" style={{ background: randomLavenderTone() }} onClick={() => setVideoId(id)}>
-                <div className="inner"><div className="label">{id ? `Video ${id.slice(0,6)}` : 'Video'}</div></div>
+              <div key={idx} className={styles.videos__tile} style={{ background: randomLavenderTone() }} onClick={() => setVideoId(id)}>
+                <div className={styles.videos__tileInner}><div className={styles.videos__label}>{id ? `Video ${id.slice(0,6)}` : 'Video'}</div></div>
               </div>
             );
           })}
         </div>
-        <div ref={embedRef} id="video-embed" className="frame r16x9" style={{ marginTop: 12, overflow: 'hidden', height: 0, opacity: 0, transition: 'height 240ms ease, opacity 240ms ease' }} />
-        {videoId && (
-          <div id="video-controls" className="open" aria-label="Video controls"><button className="button" type="button" onClick={() => setVideoId('')}>Close video</button></div>
-        )}
-        <p className="subtitle" style={{ marginTop: 12 }}>Click a square to open the video below.</p>
-      </div>
+        <div ref={embedRef} className={`${styles.videos__frame} ${styles['videos__frame--16x9']} ${styles.videos__embed}`} style={{ marginTop: 12 }} />
+        <div className={`${styles.videos__controls} ${videoId ? styles['videos__controls--open'] : ''}`} aria-label="Video controls">
+          <Button onClick={() => setVideoId('')}>Close video</Button>
+        </div>
+        <p className={styles.videos__subtitle} style={{ marginTop: 12 }}>Click a square to open the video below.</p>
+      </Card>
     </div>
   );
 };

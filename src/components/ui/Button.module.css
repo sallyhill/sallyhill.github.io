@@ -1,0 +1,4 @@
+.button { background: #ede9fe; color: #1d1028; border: none; border-radius: 8px; padding: 6px 10px; cursor: pointer; font-weight: 600; }
+.button:hover { background: #e9d5ff; }
+.button--sm { padding: 4px 8px; font-size: 0.9rem; }
+.button--block { display: block; width: 100%; }

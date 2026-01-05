@@ -1,6 +1,7 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import './styles/main.css'
+import cursorCur from './assets/nat1056.cur'
 
 import Header from './components/Header.jsx'
 import BlueGuyRunner from './components/BlueGuyRunner.jsx'
@@ -11,24 +12,25 @@ import AudioSection from './components/AudioSection.jsx'
 import VideosSection from './components/VideosSection.jsx'
 import WritingSection from './components/WritingSection.jsx'
 import Footer from './components/Footer.jsx'
+import Embeds from './components/ui/Embeds.jsx'
 
 const App = () => {
   React.useEffect(() => {
-    document.body.style.cursor = 'url("assets/nat1056.cur"), auto'
+    document.body.style.cursor = `url("${cursorCur}"), auto`
   }, [])
 
   return (
     <>
-      <BlueGuyRunner inverted className="top-runner" />
+      <BlueGuyRunner inverted top />
       <Header />
       <About />
       <Work />
-      <section className="embeds">
+      <Embeds>
         <TumblrVisuals />
         <AudioSection />
         <VideosSection />
         <WritingSection />
-      </section>
+      </Embeds>
       <Footer />
     </>
   )

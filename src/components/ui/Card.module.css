@@ -1,0 +1,3 @@
+.card { background: var(--card-1); border: none; border-radius: 12px; padding: 16px; background-image: linear-gradient(rgba(243,232,255,0.6), rgba(243,232,255,0.6)), url('../../assets/purplem1.jpg'); background-size: cover; background-repeat: no-repeat; background-position: center; }
+.card--alt { background: var(--card-2); background-image: linear-gradient(rgba(237,233,254,0.6), rgba(237,233,254,0.6)), url('../../assets/purplem1.jpg'); background-size: cover; background-repeat: no-repeat; background-position: center; }
+.card--subtle { background: var(--card-3); background-image: linear-gradient(rgba(233,213,255,0.6), rgba(233,213,255,0.6)), url('../../assets/purplem1.jpg'); background-size: cover; background-repeat: no-repeat; background-position: center; }

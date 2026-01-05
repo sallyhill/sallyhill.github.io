@@ -1,6 +1,9 @@
 import React from 'react';
 import { TUMBLR_API_KEY, TUMBLR_BLOG_HOSTNAME, TUMBLR_LIMIT } from '../lib/config.js';
 import { stripHtml } from '../lib/utils.js';
+import styles from './TumblrVisuals.module.css';
+import Card from './ui/Card.jsx';
+import Button from './ui/Button.jsx';
 
 const findImgInHtml = (html) => {
   if (!html || typeof html !== 'string') return '';
@@ -57,36 +60,36 @@ const TumblrVisuals = () => {
     .filter((i) => i.imageUrl);
 
   return (
-    <div className="embed" aria-labelledby="tumblr-title">
-      <header><h2 id="tumblr-title">Visuals</h2></header>
-      <div className="card" style={{ border: 'none', borderRadius: 0, padding: 0 }}>
-        {loading && <div className="subtitle" style={{ padding: 16 }}>Loading Tumblr posts…</div>}
-        {error && <div className="subtitle" style={{ padding: 16 }}>{error}</div>}
+    <div className={styles.visuals} aria-labelledby="tumblr-title">
+      <header className={styles.visuals__header}><h2 id="tumblr-title">Visuals</h2></header>
+      <Card padding={0}>
+        {loading && <div className={styles.visuals__subtitle} style={{ padding: 16 }}>Loading Tumblr posts…</div>}
+        {error && <div className={styles.visuals__subtitle} style={{ padding: 16 }}>{error}</div>}
         {!loading && !error && (
-          <div id="tumblr-feed" className="tumblr-grid">
+          <div className={styles.visuals__grid}>
             {items.map((item, i) => (
-              <article key={i} className="card" style={{ padding: 0 }}>
+              <Card as="article" key={i} padding={0} className={styles.visuals__itemCard}>
                 <a href={item.postUrl} target="_blank" rel="noopener noreferrer" onClick={(ev) => { ev.preventDefault(); setModal({ open: true, img: item.imageUrl, url: item.postUrl, title: item.title }); }}>
                   <img src={item.imageUrl} alt="Tumblr post" />
                 </a>
-              </article>
+              </Card>
             ))}
           </div>
         )}
-      </div>
+      </Card>
 
       {modal.open && (
-        <div className="modal-backdrop open" onClick={(e) => { if (e.target.classList.contains('modal-backdrop')) setModal({ open: false, img: '', url: '', title: '' }); }}>
-          <div className="modal">
-            <header>
+        <div className={styles.visuals__backdrop} onClick={(e) => { if ((e.target).classList.contains(styles.visuals__backdrop)) setModal({ open: false, img: '', url: '', title: '' }); }}>
+          <div className={styles.visuals__modal}>
+            <header className={styles.visuals__modalHeader}>
               <div>{modal.title}</div>
             </header>
-            <div className="content">
-              <img src={modal.img} alt="Image preview" />
+            <div className={styles.visuals__modalContent}>
+              <img className={styles.visuals__modalImage} src={modal.img} alt="Image preview" />
             </div>
-            <footer>
-              <button className="button" type="button" onClick={() => window.open(modal.url, '_blank', 'noopener,noreferrer')}>View post</button>
-              <button className="button" type="button" onClick={() => setModal({ open: false, img: '', url: '', title: '' })}>Close</button>
+            <footer className={styles.visuals__modalFooter}>
+              <Button onClick={() => window.open(modal.url, '_blank', 'noopener,noreferrer')}>View post</Button>
+              <Button onClick={() => setModal({ open: false, img: '', url: '', title: '' })}>Close</Button>
             </footer>
           </div>
         </div>

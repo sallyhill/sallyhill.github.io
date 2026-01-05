@@ -1,0 +1,7 @@
+.runner { position: relative; overflow: hidden; height: 220px; border-radius: 12px; margin-bottom: 12px; width: 100dvw; left: 50%; transform: translateX(-50%); }
+.runner__track { display: flex; align-items: center; gap: 24px; padding: 8px 12px; width: max-content; animation: runner-scroll-left 16s linear infinite; will-change: transform; }
+.runner img { height: 200px; width: auto; display: block; }
+.runner--inverted img { transform: rotate(180deg); }
+.runner--top { margin: 0 0 16px; border-radius: 0; }
+@keyframes runner-scroll-left { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .runner__track { animation: none; } }

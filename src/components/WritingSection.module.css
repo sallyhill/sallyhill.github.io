@@ -1,0 +1,17 @@
+.writing { background: transparent; border: none; border-radius: 12px; overflow: hidden; }
+.writing__header { padding: 10px 12px; border-bottom: none; color: var(--muted); }
+.writing__header h2 { margin: 0; font-size: 1rem; }
+.writing__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.writing__card { background: var(--card-2); border-radius: 12px; padding: 12px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
+.writing__card:hover { transform: translateY(-2px); transition: transform 160ms ease; }
+.writing__title { font-weight: 700; margin: 0 0 6px; overflow-wrap: break-word; word-break: break-word; font-size: 1rem; }
+.writing__excerpt { color: var(--muted); font-size: 0.95rem; }
+.writing__backdrop { position: fixed; inset: 0; background: rgba(29,16,40,0.7); display: block; z-index: 1100; }
+.writing__reader { position: fixed; inset: 24px; background: #ffffff; border-radius: 12px; box-shadow: 0 18px 48px rgba(0,0,0,0.35); overflow: hidden; display: grid; grid-template-rows: auto minmax(0, 1fr); z-index: 1200; }
+.writing__readerHeader { padding: 10px 14px; border-bottom: 1px solid #ede9fe; display: flex; justify-content: space-between; align-items: center; }
+.writing__readerActions { display: flex; gap: 5px; }
+.writing__readerTitle { margin: 0; font-size: 1rem; color: var(--muted); }
+.writing__scroll { overflow: auto; scrollbar-gutter: stable; -webkit-overflow-scrolling: touch; padding: 16px 24px; }
+.writing__content { max-width: 72ch; width: 100%; margin: 0 auto; line-height: 1.6; }
+.writing__content :where(h1,h2,h3) { margin-top: 0; }
+.writing__subtitle { color: var(--muted); font-size: 1rem; }

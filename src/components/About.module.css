@@ -1,0 +1,8 @@
+:root {}
+
+.about {}
+.about__title { margin-top: 0; }
+.about__content { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: start; }
+.about__body {}
+.about__list { margin: 8px 0 0; padding-left: 18px; }
+.about__image { width: 160px; height: auto; border-radius: 12px; object-fit: cover; }
